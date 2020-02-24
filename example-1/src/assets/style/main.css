@@ -8,3 +8,16 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+.video {
+  width: 100%;
+  height: 90%;
+  border: solid 1px black;
+}
+
+button.option.on {
+  background-color: greenyellow;
+}
+
+button.option {
+  background-color: red;
+}
