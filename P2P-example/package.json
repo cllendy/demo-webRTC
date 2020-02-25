@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node server/server.ts"
+    "start": "(ts-node server/server.ts) & npm run serve:https",
+    "serve:https": "serve --ssl-cert server/cert.pem  --ssl-key server/key.pem"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@types/ip": "^1.1.0",
     "bootstrap": "^4.4.1",
+    "core-util-is": "^1.0.2",
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
     "path": "^0.12.7",
