@@ -1,7 +1,14 @@
 import * as express from 'express';
 import * as expressWs from 'express-ws';
 import * as WebSocket from 'ws';
-import { WebSocketMessage, WebSocketCallMessage } from './messages.interface';
+import {
+  WebSocketMessage,
+  WebSocketCallMessage,
+  StartCallWebSocketMessage,
+  WebRTCIceCandidateWebSocketMessage,
+  WebRTCOfferWebSocketMessage,
+  WebRTCAnswerWebSocketMessage
+} from './messages.interface';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -53,6 +60,17 @@ function forwardMessageToOtherPerson(
   receiver.socket.send(json);
 }
 
+const command: any = {
+  login,
+  start_call,
+  webrtc_ice_candidate,
+  webrtc_offer,
+  webrtc_answer,
+  execute: function(action: string, param: WebSocketCallMessage) {
+    this[action](param);
+  }
+};
+
 /**
  * Processes the incoming message.
  * @param socket The socket that sent the message
@@ -64,36 +82,60 @@ function handleMessage(socket: WebSocket, message: WebSocketMessage): void {
     socket
   };
 
-  switch (message.channel) {
-    case 'login':
-      console.log(`${message.name} joined`);
-      connectedUsers.push({ socket, name: message.name });
-      break;
+  const params: any =
+    message.channel === 'login'
+      ? { socket, name: message.name }
+      : { sender, message };
 
-    case 'start_call':
-      console.log(`${sender.name} started a call with ${message.otherPerson}`);
-      forwardMessageToOtherPerson(sender, message);
-      break;
+  command.execute(message.channel, params);
+}
 
-    case 'webrtc_ice_candidate':
-      console.log(`received ice candidate from ${sender.name}`);
-      forwardMessageToOtherPerson(sender, message);
-      break;
+function login({ socket, name }: { socket: WebSocket; name: string }) {
+  console.log(`${name} joined`);
+  connectedUsers.push({ socket, name });
+}
 
-    case 'webrtc_offer':
-      console.log(`received offer from ${sender.name}`);
-      forwardMessageToOtherPerson(sender, message);
-      break;
+function start_call({
+  sender,
+  message
+}: {
+  sender: User;
+  message: StartCallWebSocketMessage;
+}) {
+  console.log(`${sender.name} started a call with ${message.otherPerson}`);
+  forwardMessageToOtherPerson(sender, message);
+}
 
-    case 'webrtc_answer':
-      console.log(`received answer from ${sender.name}`);
-      forwardMessageToOtherPerson(sender, message);
-      break;
+function webrtc_ice_candidate({
+  sender,
+  message
+}: {
+  sender: User;
+  message: WebRTCIceCandidateWebSocketMessage;
+}) {
+  console.log(`received ice candidate from ${sender.name}`);
+  forwardMessageToOtherPerson(sender, message);
+}
 
-    default:
-      console.log('unknown message', message);
-      break;
-  }
+function webrtc_offer({
+  sender,
+  message
+}: {
+  sender: User;
+  message: WebRTCOfferWebSocketMessage;
+}) {
+  console.log(`received offer from ${sender.name}`);
+  forwardMessageToOtherPerson(sender, message);
+}
+function webrtc_answer({
+  sender,
+  message
+}: {
+  sender: User;
+  message: WebRTCAnswerWebSocketMessage;
+}) {
+  console.log(`received answer from ${sender.name}`);
+  forwardMessageToOtherPerson(sender, message);
 }
 
 /**

@@ -34,4 +34,11 @@ type WebSocketCallMessage =
 
 type WebSocketMessage = LoginWebSocketMessage | WebSocketCallMessage;
 
-export { WebSocketMessage, WebSocketCallMessage };
+export {
+  WebSocketMessage,
+  WebSocketCallMessage,
+  StartCallWebSocketMessage,
+  WebRTCIceCandidateWebSocketMessage,
+  WebRTCOfferWebSocketMessage,
+  WebRTCAnswerWebSocketMessage
+};
