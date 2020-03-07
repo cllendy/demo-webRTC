@@ -96,6 +96,7 @@ class WebRTCService {
 
   hangUpConnection(message) {
     console.log(`receiving hang up call from ${message.otherPerson}`);
+    this.webRTC.close();
     this.hangUpView();
   }
 
