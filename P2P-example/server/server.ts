@@ -7,7 +7,8 @@ import {
   StartCallWebSocketMessage,
   WebRTCIceCandidateWebSocketMessage,
   WebRTCOfferWebSocketMessage,
-  WebRTCAnswerWebSocketMessage
+  WebRTCAnswerWebSocketMessage,
+  HangUpWebSocketMessage
 } from './messages.interface';
 import * as https from 'https';
 import * as fs from 'fs';
@@ -66,6 +67,7 @@ const command: any = {
   webrtc_ice_candidate,
   webrtc_offer,
   webrtc_answer,
+  webrtc_hangUp,
   execute: function(action: string, param: WebSocketCallMessage) {
     this[action](param);
   }
@@ -135,6 +137,16 @@ function webrtc_answer({
   message: WebRTCAnswerWebSocketMessage;
 }) {
   console.log(`received answer from ${sender.name}`);
+  forwardMessageToOtherPerson(sender, message);
+}
+function webrtc_hangUp({
+  sender,
+  message
+}: {
+  sender: User;
+  message: HangUpWebSocketMessage;
+}) {
+  console.log(`received hang up from ${sender.name} to ${message.otherPerson}`);
   forwardMessageToOtherPerson(sender, message);
 }
 

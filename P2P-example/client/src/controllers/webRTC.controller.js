@@ -6,7 +6,9 @@ class webRTCController {
     this.view.bindEventsToWebRTC(this.addEventsToWebRTCHandler);
     this.view.bindAddTrackToWebRTC(this.addTrackToWebRTCHandler);
     this.view.bindStartCall(this.startCallHandler);
+    this.view.bindHangUp(this.HangUpConnectionHandler);
     this.webRTCService.bindShowVideocall(this.showVideoCallHandler);
+    this.webRTCService.bindhangUpView(this.hangUpViewHandler);
   }
 
   addEventsToWebRTCHandler = remoteVideo => {
@@ -27,5 +29,13 @@ class webRTCController {
 
   showVideoCallHandler = () => {
     return this.view.showVideoCall();
+  };
+
+  HangUpConnectionHandler = () => {
+    return this.webRTCService.bindHangUpConnection();
+  };
+
+  hangUpViewHandler = () => {
+    return this.view.hangUpView();
   };
 }

@@ -26,11 +26,17 @@ interface WebRTCAnswerWebSocketMessage {
   otherPerson: string;
 }
 
+interface HangUpWebSocketMessage {
+  channel: 'webrtc_hangUp';
+  otherPerson: string;
+}
+
 type WebSocketCallMessage =
   | StartCallWebSocketMessage
   | WebRTCIceCandidateWebSocketMessage
   | WebRTCOfferWebSocketMessage
-  | WebRTCAnswerWebSocketMessage;
+  | WebRTCAnswerWebSocketMessage
+  | HangUpWebSocketMessage;
 
 type WebSocketMessage = LoginWebSocketMessage | WebSocketCallMessage;
 
@@ -40,5 +46,6 @@ export {
   StartCallWebSocketMessage,
   WebRTCIceCandidateWebSocketMessage,
   WebRTCOfferWebSocketMessage,
-  WebRTCAnswerWebSocketMessage
+  WebRTCAnswerWebSocketMessage,
+  HangUpWebSocketMessage
 };
