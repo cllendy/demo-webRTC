@@ -113,6 +113,8 @@ class webRTCView {
     this._hideVideoCall();
     this._resetVideoElement();
     this.localStream = null;
+    this.GUI.buttonVideo.classList.add('on');
+    this.GUI.buttonAudio.classList.add('on');
     this.optionLocalStream = {
       audio: true,
       video: true
