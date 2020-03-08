@@ -91,12 +91,26 @@ class WebRTCService {
       otherPerson: this.otherPerson
     });
     this.webRTC.close();
+    this.webRTC = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: ['stun:stun.stunprotocol.org']
+        }
+      ]
+    });
     this.otherPerson = '';
   }
 
   hangUpConnection(message) {
     console.log(`receiving hang up call from ${message.otherPerson}`);
     this.webRTC.close();
+    this.webRTC = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: ['stun:stun.stunprotocol.org']
+        }
+      ]
+    });
     this.hangUpView();
   }
 

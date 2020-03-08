@@ -11,6 +11,11 @@ class webRTCController {
     this.webRTCService.bindhangUpView(this.hangUpViewHandler);
   }
 
+  resetWebRTC = () => {
+    this.view.bindEventsToWebRTC(this.addEventsToWebRTCHandler);
+    this.view.bindAddTrackToWebRTC(this.addTrackToWebRTCHandler);
+  };
+
   addEventsToWebRTCHandler = remoteVideo => {
     return this.webRTCService.bindEventsToWebRTC(remoteVideo);
   };
@@ -32,10 +37,12 @@ class webRTCController {
   };
 
   HangUpConnectionHandler = () => {
+    this.resetWebRTC();
     return this.webRTCService.bindHangUpConnection();
   };
 
   hangUpViewHandler = () => {
+    this.resetWebRTC();
     return this.view.hangUpView();
   };
 }

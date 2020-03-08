@@ -116,5 +116,11 @@ class webRTCView {
   hangUpView = () => {
     this._hideVideoCall();
     this._resetVideoElement();
+    this.localStream = null;
+    this.optionLocalStream = {
+      audio: true,
+      video: true
+    };
+    this.localStreamEmited = null;
   };
 }
