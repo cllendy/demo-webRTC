@@ -106,10 +106,11 @@ class webRTCView {
     this.localStreamEmited.getAudioTracks()[0].enabled = this.optionLocalStream.audio;
   };
 
-  bindHangUp(handler) {
+  bindHangUp(handler, handlerReset) {
     this.GUI.buttonHangUp.addEventListener('click', async () => {
       this.hangUpView();
       handler();
+      handlerReset();
     });
   }
 

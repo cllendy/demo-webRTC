@@ -111,7 +111,9 @@ class WebRTCService {
         }
       ]
     });
+    this.otherPerson = '';
     this.hangUpView();
+    this.handlerReset();
   }
 
   addTracks(localStream) {
@@ -132,8 +134,9 @@ class WebRTCService {
     this.showVideoCall = handler;
   }
 
-  bindhangUpView(handler) {
+  bindhangUpView(handler, handlerReset) {
     this.hangUpView = handler;
+    this.handlerReset = handlerReset;
   }
 
   sendMessageToSignallingServer(message) {

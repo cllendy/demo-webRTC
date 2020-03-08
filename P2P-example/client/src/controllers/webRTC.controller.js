@@ -6,12 +6,15 @@ class webRTCController {
     this.view.bindEventsToWebRTC(this.addEventsToWebRTCHandler);
     this.view.bindAddTrackToWebRTC(this.addTrackToWebRTCHandler);
     this.view.bindStartCall(this.startCallHandler);
-    this.view.bindHangUp(this.HangUpConnectionHandler);
+    this.view.bindHangUp(this.HangUpConnectionHandler, this.resetWebRTCHandler);
     this.webRTCService.bindShowVideocall(this.showVideoCallHandler);
-    this.webRTCService.bindhangUpView(this.hangUpViewHandler);
+    this.webRTCService.bindhangUpView(
+      this.hangUpViewHandler,
+      this.resetWebRTCHandler
+    );
   }
 
-  resetWebRTC = () => {
+  resetWebRTCHandler = () => {
     this.view.bindEventsToWebRTC(this.addEventsToWebRTCHandler);
     this.view.bindAddTrackToWebRTC(this.addTrackToWebRTCHandler);
   };
@@ -37,12 +40,10 @@ class webRTCController {
   };
 
   HangUpConnectionHandler = () => {
-    this.resetWebRTC();
     return this.webRTCService.bindHangUpConnection();
   };
 
   hangUpViewHandler = () => {
-    this.resetWebRTC();
     return this.view.hangUpView();
   };
 }
