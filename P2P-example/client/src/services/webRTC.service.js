@@ -12,6 +12,7 @@ class WebRTCService {
       webrtc_ice_candidate: message => this.addICECandidate(message),
       webrtc_offer: message => this.startOffer(message),
       webrtc_answer: message => this.startAnswer(message),
+      webrtc_hangUp: message => this.hangUpConnection(message),
       execute: function(params = {}, action) {
         this[action](params);
       }
@@ -84,6 +85,37 @@ class WebRTCService {
     });
   }
 
+  bindHangUpConnection() {
+    this.sendMessageToSignallingServer({
+      channel: 'webrtc_hangUp',
+      otherPerson: this.otherPerson
+    });
+    this.webRTC.close();
+    this.webRTC = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: ['stun:stun.stunprotocol.org']
+        }
+      ]
+    });
+    this.otherPerson = '';
+  }
+
+  hangUpConnection(message) {
+    console.log(`receiving hang up call from ${message.otherPerson}`);
+    this.webRTC.close();
+    this.webRTC = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: ['stun:stun.stunprotocol.org']
+        }
+      ]
+    });
+    this.otherPerson = '';
+    this.hangUpView();
+    this.handlerReset();
+  }
+
   addTracks(localStream) {
     for (const track of localStream.getTracks()) {
       this.webRTC.addTrack(track, localStream);
@@ -100,6 +132,11 @@ class WebRTCService {
 
   bindShowVideocall(handler) {
     this.showVideoCall = handler;
+  }
+
+  bindhangUpView(handler, handlerReset) {
+    this.hangUpView = handler;
+    this.handlerReset = handlerReset;
   }
 
   sendMessageToSignallingServer(message) {

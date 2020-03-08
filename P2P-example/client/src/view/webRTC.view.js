@@ -6,7 +6,8 @@ class webRTCView {
       callButton: window.document.getElementById('call-button'),
       videoContainer: window.document.getElementById('video-container'),
       buttonAudio: document.getElementById('stopAudio'),
-      buttonVideo: document.getElementById('stopVideo')
+      buttonVideo: document.getElementById('stopVideo'),
+      buttonHangUp: document.getElementById('hangUp')
     };
 
     this.localStream = null;
@@ -53,6 +54,10 @@ class webRTCView {
     this.GUI.buttonAudio.addEventListener('click', this.clickAudioButton);
   }
 
+  hideVideoCall = () => {
+    return this._hideVideoCall();
+  };
+
   _hideVideoCall() {
     this._hideElement(this.GUI.videoContainer);
     this._showElement(this.GUI.callButton);
@@ -65,6 +70,11 @@ class webRTCView {
   _showVideoCall() {
     this._hideElement(this.GUI.callButton);
     this._showElement(this.GUI.videoContainer);
+  }
+
+  _resetVideoElement() {
+    this.GUI.localVideo.srcObject = null;
+    this.GUI.remoteVideo.srcObject = null;
   }
 
   _hideElement(element) {
@@ -89,5 +99,24 @@ class webRTCView {
     this._toogleOptionCall('audio');
     this.GUI.buttonAudio.classList.toggle('on');
     this.localStream.getAudioTracks()[0].enabled = this.optionLocalStream.audio;
+  };
+
+  bindHangUp(handler, handlerReset) {
+    this.GUI.buttonHangUp.addEventListener('click', async () => {
+      this.hangUpView();
+      handler();
+      handlerReset();
+    });
+  }
+
+  hangUpView = () => {
+    this._hideVideoCall();
+    this._resetVideoElement();
+    this.localStream = null;
+    this.optionLocalStream = {
+      audio: true,
+      video: true
+    };
+    this.localStreamEmited = null;
   };
 }
