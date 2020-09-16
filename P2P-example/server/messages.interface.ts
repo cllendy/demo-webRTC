@@ -3,6 +3,8 @@ interface LoginWebSocketMessage {
   name: string;
 }
 
+//prueba cambio
+
 interface StartCallWebSocketMessage {
   channel: 'start_call';
   otherPerson: string;
